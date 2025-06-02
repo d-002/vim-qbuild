@@ -1,1 +1,1 @@
-# qbuild.init
+# vim-qbuild
