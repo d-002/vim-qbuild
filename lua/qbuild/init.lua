@@ -56,6 +56,10 @@ function M.run_nth_build_file(index)
     return 1
 end
 
+function M.run_build_file()
+    return M.run_nth_build_file(config.options.default_index)
+end
+
 function M.open_build_dir()
     local path = get_scripts_dir()
     local stat = vim.uv.fs_stat(path)
@@ -69,10 +73,6 @@ function M.open_build_dir()
     end
 
     vim.cmd("Vexplore " .. path)
-end
-
-function M.run_build_file()
-    return M.run_nth_build_file(0)
 end
 
 return M

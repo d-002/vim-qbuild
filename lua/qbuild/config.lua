@@ -2,7 +2,8 @@ local M = {}
 
 M.options = {
     build_dir = ".qbuild_scripts",
-    log_all = true
+    log_all = true,
+    default_index = 0,
 }
 
 function M.setup(user_options)
