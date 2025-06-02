@@ -2,15 +2,14 @@
 
 Quickly run build scripts and more anywhere in your projects, with a simple command.
 
-This plugin allows you to quickly run scripts stored inside a specific directory in a given project.
+This plugin allows you to run files stored inside a given project.  
+The notion of a "project" is derived from [project.nvim](https://github.com/ahmedkhalf/project.nvim), or in case it is not imported, from the current directory.
 
-The notion of a "project" is derived from [project.nvim](https://github.com/ahmedkhalf/project.nvim), or in case it does not exist, from the current directory.
-
-The build scripts are executed after a `cd` into their parent directory, and will not be run from where the command was executed.
+The build scripts are executed after a `cd` into their parent directory, hence will not be run from where the command was executed.
 
 ## Requirements
 
-- Neovim 0.9+ (only tested in 0.11.1)
+- Neovim 0.9+ (theoretically, only tested in 0.11.1)
 - [ahmedkhalf/project.nvim](https://github.com/ahmedkhalf/project.nvim)
 
 ## Installation
@@ -25,22 +24,21 @@ use {
     config = function()
         require("vim-qbuild").setup() {
             -- optional, your config here
+            build_dir = ".qbuild_scripts",
+            log_all = true,
+            default_index = 0,
         }
     end
 }
 ```
 
-## Options
+## Configuration
 
 Here is a list of the available options:
 
-- `build_dir`: Used to specify the build directory inside the current project. If your project is `~/my_project` and this options is set to `.qbuild`, then the scripts will be searched inside `~/my_project/.qbuild`.
-
+- `build_dir`: Used to specify the build directory inside the current project. If your project is `~/my_project` and this option is set to `.qbuild`, then the scripts will be searched inside `~/my_project/.qbuild`.
 - `log_all`: Whether to log information in case the build file could not be found for example. Shoud be a boolean value.
-
 - `default_index`: The index for the default build file among all the files in the given build directory. Should be a positive integer.
-
-## Configuration
 
 Below is an example configuration for vim-qbuild:
 
@@ -63,6 +61,6 @@ vim.keymap.set("n", "<leader>q2", function() M.run_nth_build_file(2) end)
 
 This plugin comes with the following functions:
 
-- `run_nth_build_file(index)`: run the nth (zero-based) build file, sorted by name. `index` shoud be an integer greater than zero
-- `run_build_file()`: run the default build file
-- `open_build_dir()`: open the build dir in a new netrw window
+- `run_nth_build_file(index)`: Run the nth (zero-based) build file, sorted by name. `index` shoud be an integer greater than zero.
+- `run_build_file()`: Run the default build file.
+- `open_build_dir()`: open the build dir in a new netrw window.
