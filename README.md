@@ -21,7 +21,7 @@ The build scripts are executed after a `cd` into their parent directory, hence w
 
 use {
     "d-002/vim-qbuild",
-    requires {
+    requires = {
         "ahmedkhalf/project.nvim",
     },
     config = function()
