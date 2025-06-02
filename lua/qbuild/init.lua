@@ -1,5 +1,6 @@
 print("Hello world")
 
+local config = require("qbuild.config")
 local M = {}
 
 function M.get_root()
@@ -14,6 +15,29 @@ function M.get_root()
     return project.get_project_root() or vim.fn.getcwd()
 end
 
-vim.keymap.set("n", "<leader>b", function() print(M.get_root()) end)
+function M.get_scripts_dir()
+    return vim.fs.joinpath(M.get_root(), config.options.build_dir)
+end
+
+function M.run_nth_build_file(index)
+    local i = 0;
+
+    for name, type in vim.fs.dir(M.get_scripts_dir()) do
+        if type == "file" then
+            if i == index then print(file) end
+
+            i = i+1;
+        end
+    end
+
+    -- print("Target build file could not be found")
+end
+
+function M.run_build_file()
+    return M.run_nth_build_file(0)
+end
+
+vim.keymap.set("n", "<leader>t", function() print(M.get_root()) end)
+vim.keymap.set("n", "<leader>b", function() print(M.run_build_file()) end)
 
 return M
