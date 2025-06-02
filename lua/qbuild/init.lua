@@ -21,16 +21,26 @@ end
 
 function M.run_nth_build_file(index)
     local i = 0;
+    local parent = M.get_scripts_dir();
 
-    for name, type in vim.fs.dir(M.get_scripts_dir()) do
+    print("ok")
+
+    for name, type in vim.fs.dir(parent) do
         if type == "file" then
-            if i == index then print(file) end
+            local path = vim.fs.joinpath(parent, name)
+
+            if i == index then
+                print(vim.fn.system(path))
+                return 0
+            end
 
             i = i+1;
         end
     end
 
-    -- print("Target build file could not be found")
+    print("Target build file could not be found")
+
+    return 1
 end
 
 function M.run_build_file()
@@ -38,6 +48,6 @@ function M.run_build_file()
 end
 
 vim.keymap.set("n", "<leader>t", function() print(M.get_root()) end)
-vim.keymap.set("n", "<leader>b", function() print(M.run_build_file()) end)
+vim.keymap.set("n", "<leader>b", M.run_build_file)
 
 return M
