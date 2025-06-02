@@ -1,4 +1,4 @@
-local config = require("qbuild.config")
+local config = require("vim-qbuild.config")
 local M = {}
 
 function get_root()
