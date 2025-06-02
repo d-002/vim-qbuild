@@ -1,5 +1,3 @@
-print("Hello world")
-
 local config = require("qbuild.config")
 local M = {}
 
@@ -19,6 +17,19 @@ function get_scripts_dir()
     return vim.fs.joinpath(get_root(), config.options.build_dir)
 end
 
+-- executes a script as if it were run in the directory it is stored
+function run_in_dir(file)
+    local uv = vim.uv or vim.loop
+    local dir = vim.fs.dirname(file)
+    local orig_cwd = uv.cwd()
+
+    uv.chdir(dir)
+    local result = vim.fn.system({ file })
+    uv.chdir(orig_cwd)
+
+    return result
+end
+
 function M.run_nth_build_file(index)
     local i = 0;
     local parent = get_scripts_dir();
@@ -28,7 +39,9 @@ function M.run_nth_build_file(index)
             local path = vim.fs.joinpath(parent, name)
 
             if i == index then
-                print(vim.fn.system(path))
+                local result = run_in_dir(path)
+
+                if config.options.log_all then print(result) end
                 return 0
             end
 
@@ -36,7 +49,9 @@ function M.run_nth_build_file(index)
         end
     end
 
-    print("Target qbuild file could not be found")
+    if config.options.log_all then
+        print("Target qbuild file could not be found")
+    end
 
     return 1
 end
@@ -46,7 +61,10 @@ function M.open_build_dir()
     local stat = vim.uv.fs_stat(path)
 
     if not stat or stat.type ~= "directory" then
-        print("Inexistent or invalid qbuild directory")
+        if config.options.log_all then
+            print("Inexistent or invalid qbuild directory")
+        end
+
         return
     end
 
@@ -56,11 +74,5 @@ end
 function M.run_build_file()
     return M.run_nth_build_file(0)
 end
-
-vim.keymap.set("n", "<leader>qb", M.run_build_file)
-vim.keymap.set("n", "<leader>q0", function() M.run_build_file(0) end)
-vim.keymap.set("n", "<leader>q1", function() M.run_build_file(1) end)
-vim.keymap.set("n", "<leader>q2", function() M.run_build_file(2) end)
-vim.keymap.set("n", "<leader>qo", M.open_build_dir)
 
 return M
