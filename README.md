@@ -69,3 +69,8 @@ This plugin comes with the following functions:
 - `run_nth_build_file(index)`: Run the nth (zero-based) build file, sorted by name. `index` shoud be an integer greater than zero.
 - `run_build_file()`: Run the default build file.
 - `open_build_dir()`: open the build dir in a new netrw window.
+
+QBuild also defines custom user commands:
+
+- `QBuild`: calls `run_build_file`
+- `QBuildDir`: calls `open_build_dir`

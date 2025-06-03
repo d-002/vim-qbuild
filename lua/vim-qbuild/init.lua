@@ -75,4 +75,7 @@ function M.open_build_dir()
     vim.cmd("Vexplore " .. path)
 end
 
+vim.api.nvim_create_user_command('QBuild', M.run_build_file, {})
+vim.api.nvim_create_user_command('QBuildDir', M.open_build_dir, {})
+
 return M
