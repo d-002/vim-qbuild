@@ -1,5 +1,7 @@
 # vim-qbuild
 
+<!-- qbuild.nvim -->
+
 Quickly run build scripts and more anywhere in your projects, with a simple command.
 
 This plugin allows you to run files stored inside a given project.  
@@ -24,12 +26,11 @@ use {
     requires = {
         "ahmedkhalf/project.nvim",
     },
+
+    -- optional, to specify a config (override defaults)
     config = function()
         require("vim-qbuild.config").setup() {
-            -- optional, your config here
-            build_dir = ".qbuild_scripts",
-            log_all = true,
-            default_index = 0,
+            log_all = false,
         }
     end
 }
@@ -42,6 +43,7 @@ Here is a list of the available options:
 - `build_dir`: Used to specify the build directory inside the current project. If your project is `~/my_project` and this option is set to `.qbuild`, then the scripts will be searched inside `~/my_project/.qbuild`.
 - `log_all`: Whether to log information in case the build file could not be found for example. Shoud be a boolean value.
 - `default_index`: The index for the default build file among all the files in the given build directory. Should be a positive integer.
+- `ask_create_dir`: Whether to ask the user to create the build dir when trying to open a nonexistent one. If set to `false`, the dir will be created.
 
 Below is an example configuration for vim-qbuild:
 

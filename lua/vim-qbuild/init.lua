@@ -50,7 +50,7 @@ function M.run_nth_build_file(index)
     end
 
     if config.options.log_all then
-        print("Target qbuild file could not be found")
+        print("Target QBuild file could not be found")
     end
 
     return 1
@@ -60,13 +60,35 @@ function M.run_build_file()
     return M.run_nth_build_file(config.options.default_index)
 end
 
+function is_yes(str)
+    return str ~= nil and string.len(str) > 0 and string.lower(string.sub(str, 1, 1)) == "y"
+end
+
 function M.open_build_dir()
     local path = get_scripts_dir()
     local stat = vim.uv.fs_stat(path)
 
-    if not stat or stat.type ~= "directory" then
+    if not stat then
+        if config.options.ask_create_dir then
+            vim.ui.input(
+                { prompt = "Create missing dir " .. path .. "? [Y/n] " },
+
+                function(input)
+                    if is_yes(input) then
+                        vim.fn.mkdir(path, "p")
+                        vim.cmd("Vexplore " .. path)
+                    elseif config.options.log_all then
+                        print("Operation cancelled by user")
+                    end
+                end
+            )
+
+            return -- the rest of the actions is handled asynchronously
+        else
+        end
+    elseif stat.type ~= "directoryy" then
         if config.options.log_all then
-            print("Inexistent or invalid qbuild directory")
+            print(path .. " is not a directory")
         end
 
         return
