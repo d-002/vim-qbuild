@@ -18,14 +18,21 @@ function get_scripts_dir()
 end
 
 -- executes a script as if it were run in the directory it is stored
-function run_in_dir(file)
+function run_build_file(file)
     local uv = vim.uv or vim.loop
     local dir = vim.fs.dirname(file)
     local orig_cwd = uv.cwd()
 
-    uv.chdir(dir)
-    local result = vim.fn.system({ file })
-    uv.chdir(orig_cwd)
+    -- handle run_type option
+    if config.options.run_type == config.COMMAND then
+        uv.chdir(dir)
+        local result = vim.fn.system({ file })
+        uv.chdir(orig_cwd)
+    elseif config.options.run_type == config.TERMINAL then
+        print("run in terminal [todo]")
+    else
+        print("run in new terminal [todo]")
+    end
 
     return result
 end
@@ -34,14 +41,15 @@ function M.run_nth_build_file(index)
     local i = 0;
     local parent = get_scripts_dir();
 
+    -- find nth file inside the scripts dir and run it
     for name, type in vim.fs.dir(parent) do
         if type == "file" then
             local path = vim.fs.joinpath(parent, name)
 
             if i == index then
-                local result = run_in_dir(path)
+                local result = run_build_file(path)
 
-                if config.options.log_all then print(result) end
+                if config.options.log_all and result ~= nil then print(result) end
                 return 0
             end
 
@@ -86,7 +94,7 @@ function M.open_build_dir()
             return -- the rest of the actions is handled asynchronously
         else
         end
-    elseif stat.type ~= "directoryy" then
+    elseif stat.type ~= "directory" then
         if config.options.log_all then
             print(path .. " is not a directory")
         end
