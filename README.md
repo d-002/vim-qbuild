@@ -26,13 +26,6 @@ use {
     requires = {
         "ahmedkhalf/project.nvim",
     },
-
-    -- optional, to specify a config (override defaults)
-    config = function()
-        require("vim-qbuild.config").setup() {
-            log_all = false,
-        }
-    end
 }
 ```
 
@@ -40,14 +33,23 @@ use {
 
 Here is a list of the available options:
 
-- `build_dir`: Used to specify the build directory inside the current project. If your project is `~/my_project` and this option is set to `.qbuild`, then the scripts will be searched inside `~/my_project/.qbuild`.
-- `log_all`: Whether to log information in case the build file could not be found for example. Shoud be a boolean value.
-- `default_index`: The index for the default build file among all the files in the given build directory. Should be a positive integer.
-- `ask_create_dir`: Whether to ask the user to create the build dir when trying to open a nonexistent one. If set to `false`, the dir will be created.
+- `build_dir`: Used to specify the build directory inside the current project.
+If your project is `~/my_project` and this option is set to `.qbuild`, then the scripts will be searched inside `~/my_project/.qbuild`.
+- `log_all`: Whether to log information in case the build file could not be found for example.
+Should be a boolean value.
+- `default_index`: The index for the default build file among all the files in the given build directory.
+Should be a positive integer.
+- `ask_create_dir`: Whether to ask the user to create the build dir when trying to open a nonexistent one.
+If set to `false`, the dir will be created.
 
 Below is an example configuration for vim-qbuild:
 
 ```lua
+-- add custom options if needed (override defaults)
+require("vim-qbuild.config").setup({
+    log_all = false,
+})
+
 local qbuild = require("vim-qbuild")
 
 -- open the build dir in netrw-vexplore
@@ -68,7 +70,8 @@ vim.keymap.set("n", "<leader>q2", function() qbuild.run_nth_build_file(2) end)
 
 This plugin comes with the following functions:
 
-- `run_nth_build_file(index)`: Run the nth (zero-based) build file, sorted by name. `index` shoud be an integer greater than zero.
+- `run_nth_build_file(index)`: Run the nth (zero-based) build file, sorted by name.
+`index` shoud be an integer greater than zero.
 - `run_build_file()`: Run the default build file.
 - `open_build_dir()`: open the build dir in a new netrw window.
 
