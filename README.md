@@ -37,8 +37,11 @@ Should be a boolean value.
 Should be a positive integer.
 - `ask_create_dir`: Whether to ask the user to create the build dir when trying to open a nonexistent one.
 If set to `false`, the dir will be created.
-- `run_type`: This options defines the behavior when running a build file.
-Either display its result in the command line (`COMMAND`), in an existing terminal (create one if cannot find one, `TERMINAL`), or in a new terminal window (`NEWTERM`).
+- `run_type`: This option defines the behavior when running a build file.
+Here are its possible values, any other will result in an error:
+    - `COMMAND`: Display the script's output in the command line.
+    - `TERMINAL`: Run the script in an existing terminal window (find the first one), or behave like `NEWTERM` if it cannot find one.
+    - `NEWTERM`: Create a new terminal window with vsplit, then run the script there.
 
 Below is an example configuration for vim-qbuild:
 
