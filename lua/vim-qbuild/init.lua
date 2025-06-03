@@ -25,15 +25,48 @@ function run_build_file(file)
 
     local result
 
-    -- handle run_type option
-    if config.options.run_type == config.COMMAND then
+    function find_terminal()
+        for _, win in ipairs(vim.api.nvim_list_wins()) do
+            local buf = vim.api.nvim_win_get_buf(win)
+
+            if vim.api.nvim_buf_get_option(buf, "buftype") == "terminal" then
+                local chan_id = vim.b[buf].terminal_job_id
+                vim.api.nvim_set_current_win(win)
+                vim.api.nvim_set_current_buf(buf)
+                return
+            end
+        end
+
+        -- no terminal has been found, create one
+        new_terminal()
+    end
+
+    function new_terminal()
+        vim.cmd("vsplit")
+        vim.cmd("terminal")
+        vim.cmd("startinsert")
+    end
+
+    function run_in_command()
         uv.chdir(dir)
         result = vim.fn.system({ file })
         uv.chdir(orig_cwd)
+    end
+
+    function run_in_terminal()
+        local chan = vim.b.terminal_job_id
+        vim.fn.chansend(chan, "cd " .. dir .. "\n./" .. vim.fs.basename(file) .. "\n")
+    end
+
+    -- handle run_type option
+    if config.options.run_type == config.COMMAND then
+        run_in_command()
     elseif config.options.run_type == config.TERMINAL then
-        print("run in terminal [todo]")
+        find_terminal()
+        run_in_terminal()
     else
-        print("run in new terminal [todo]")
+        new_terminal()
+        run_in_terminal()
     end
 
     return result

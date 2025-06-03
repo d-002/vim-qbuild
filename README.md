@@ -37,16 +37,19 @@ Should be a boolean value.
 Should be a positive integer.
 - `ask_create_dir`: Whether to ask the user to create the build dir when trying to open a nonexistent one.
 If set to `false`, the dir will be created.
+- `run_type`: This options defines the behavior when running a build file.
+Either display its result in the command line (`COMMAND`), in an existing terminal (create one if cannot find one, `TERMINAL`), or in a new terminal window (`NEWTERM`).
 
 Below is an example configuration for vim-qbuild:
 
 ```lua
--- add custom options if needed (override defaults)
-require("vim-qbuild.config").setup({
-    log_all = false,
-})
-
 local qbuild = require("vim-qbuild")
+local qconfig = require("vim-qbuild.config")
+
+-- add custom options if needed (override defaults)
+qconfig.setup({
+    run_type = qconfig.TERMINAL
+})
 
 -- open the build dir in netrw-vexplore
 vim.keymap.set("n", "<leader>qo", qbuild.open_build_dir)
