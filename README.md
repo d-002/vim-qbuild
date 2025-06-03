@@ -58,18 +58,18 @@ vim.keymap.set("n", "<leader>qo", qbuild.open_build_dir)
 vim.keymap.set("n", "<leader>qb", qbuild.run_build_file)
 
 -- run the first build script
-vim.keymap.set("n", "<leader>q0", function() qbuild.run_nth_build_file(0) end)
--- run the second build script
 vim.keymap.set("n", "<leader>q1", function() qbuild.run_nth_build_file(1) end)
--- and so on
+-- run the second build script
 vim.keymap.set("n", "<leader>q2", function() qbuild.run_nth_build_file(2) end)
+-- and so on
+vim.keymap.set("n", "<leader>q3", function() qbuild.run_nth_build_file(3) end)
 ```
 
 ## API
 
 This plugin comes with the following functions:
 
-- `run_nth_build_file(index)`: Run the nth (zero-based) build file, sorted by name.
+- `run_nth_build_file(index)`: Run the nth (one-based) build file, sorted by name.
 `index` shoud be an integer greater than zero.
 - `run_build_file()`: Run the default build file.
 - `open_build_dir()`: open the build dir in a new netrw window.

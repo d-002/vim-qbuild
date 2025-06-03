@@ -7,7 +7,7 @@ local M = {
 M.options = {
     build_dir = ".qbuild_scripts",
     log_all = true,
-    default_index = 0,
+    default_index = 1,
     ask_create_dir = true,
     run_type = M.COMMAND,
 }

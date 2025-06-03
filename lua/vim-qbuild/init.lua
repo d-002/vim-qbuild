@@ -72,8 +72,9 @@ function run_build_file(file)
     return result
 end
 
+-- returns 0 on success, 1 on error
 function M.run_nth_build_file(index)
-    local i = 0;
+    local i = 1;
     local parent = get_scripts_dir();
 
     -- find nth file inside the scripts dir and run it
