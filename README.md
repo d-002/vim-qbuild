@@ -19,13 +19,9 @@ The build scripts are executed after a `cd` into their parent directory, hence w
 ### packer
 
 ```lua
--- Lua
-
 use {
     "d-002/vim-qbuild",
-    requires = {
-        "ahmedkhalf/project.nvim",
-    },
+    requires = "ahmedkhalf/project.nvim",
 }
 ```
 

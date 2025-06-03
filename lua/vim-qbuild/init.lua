@@ -23,10 +23,12 @@ function run_build_file(file)
     local dir = vim.fs.dirname(file)
     local orig_cwd = uv.cwd()
 
+    local result
+
     -- handle run_type option
     if config.options.run_type == config.COMMAND then
         uv.chdir(dir)
-        local result = vim.fn.system({ file })
+        result = vim.fn.system({ file })
         uv.chdir(orig_cwd)
     elseif config.options.run_type == config.TERMINAL then
         print("run in terminal [todo]")
@@ -49,7 +51,7 @@ function M.run_nth_build_file(index)
             if i == index then
                 local result = run_build_file(path)
 
-                if config.options.log_all and result ~= nil then print(result) end
+                if result ~= nil then print(result) end
                 return 0
             end
 
@@ -58,7 +60,7 @@ function M.run_nth_build_file(index)
     end
 
     if config.options.log_all then
-        print("Target QBuild file could not be found")
+        print("Target QBuild script could not be found")
     end
 
     return 1
@@ -69,13 +71,25 @@ function M.run_build_file()
 end
 
 function is_yes(str)
-    return str ~= nil and string.len(str) > 0 and string.lower(string.sub(str, 1, 1)) == "y"
+    return
+        str ~= nil
+        and string.len(str) > 0
+        and string.lower(string.sub(str, 1, 1)) == "y"
 end
 
 function M.open_build_dir()
     local path = get_scripts_dir()
     local stat = vim.uv.fs_stat(path)
 
+    function create_dir()
+        vim.fn.mkdir(path, "p")
+    end
+
+    function open_dir()
+        vim.cmd("Vexplore " .. path)
+    end
+
+    -- no dir: ask or create it
     if not stat then
         if config.options.ask_create_dir then
             vim.ui.input(
@@ -83,26 +97,29 @@ function M.open_build_dir()
 
                 function(input)
                     if is_yes(input) then
-                        vim.fn.mkdir(path, "p")
-                        vim.cmd("Vexplore " .. path)
+                        create_dir()
+                        open_dir()
                     elseif config.options.log_all then
                         print("Operation cancelled by user")
                     end
                 end
             )
 
-            return -- the rest of the actions is handled asynchronously
         else
+            create_dir()
+            open_dir()
         end
+
+    -- not a dir: abort
     elseif stat.type ~= "directory" then
         if config.options.log_all then
             print(path .. " is not a directory")
         end
 
-        return
+    -- ok
+    else
+        open_dir()
     end
-
-    vim.cmd("Vexplore " .. path)
 end
 
 vim.api.nvim_create_user_command('QBuild', M.run_build_file, {})
