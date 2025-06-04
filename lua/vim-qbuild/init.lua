@@ -18,8 +18,13 @@ function get_scripts_dir()
 end
 
 -- executes a script with the given run type, from the given directory
-function run_build_file(dir, file)
+function run_build_file(file)
     local uv = vim.uv or vim.loop
+    local root = get_root()
+    local filepath = fim.fs.joinpath(
+        config.options.build_dir,
+        vim.fs.basename(file)
+    )
     local orig_cwd = uv.cwd()
 
     local result
@@ -47,14 +52,14 @@ function run_build_file(dir, file)
     end
 
     function run_in_command()
-        uv.chdir(dir)
-        result = vim.fn.system({ file })
+        uv.chdir(root)
+        result = vim.fn.system({ filepath })
         uv.chdir(orig_cwd)
     end
 
     function run_in_terminal()
         local chan = vim.b.terminal_job_id
-        vim.fn.chansend(chan, "cd " .. dir .. "\n./" .. vim.fs.basename(file) .. "\n")
+        vim.fn.chansend(chan, "cd " .. root .. "\n./" .. filepath .. "\n")
     end
 
     -- handle run_type option
@@ -82,7 +87,7 @@ function M.run_nth_build_file(index)
             local path = vim.fs.joinpath(root, name)
 
             if i == index then
-                local result = run_build_file(root, path)
+                local result = run_build_file(path)
 
                 if result ~= nil then print(result) end
                 return 0
