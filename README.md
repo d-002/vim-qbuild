@@ -5,13 +5,14 @@
 Quickly run build scripts and more anywhere in your projects, with a simple command.
 
 This plugin allows you to run files stored inside a given project.  
-The notion of a "project" is derived from [project.nvim](https://github.com/ahmedkhalf/project.nvim), or in case it is not imported, from the current directory.
+The notion of a "project" is derived from [project.nvim](https://github.com/ahmedkhalf/project.nvim).
+In case this plugin is not imported, the project root is defined as the working directory.
 
-The build scripts are executed after a `cd` into their parent directory, hence will not be run from where the command was executed.
+The build scripts are executed after a `cd` into the project root, hence will not be run from where in Neovim the command was executed.
 
 ## Requirements
 
-- Neovim 0.9+ (theoretically, only tested in 0.11.1)
+- Neovim 0.9+ (I think, only tested in 0.11.1)
 - [ahmedkhalf/project.nvim](https://github.com/ahmedkhalf/project.nvim)
 
 ## Installation
@@ -31,12 +32,12 @@ Here is a list of the available options:
 
 - `build_dir`: Used to specify the build directory inside the current project.
 If your project is `~/my_project` and this option is set to `.qbuild`, then the scripts will be searched inside `~/my_project/.qbuild`.
-- `log_all`: Whether to log information in case the build file could not be found for example.
+- `log_all`: Whether to log extra information.
 Should be a boolean value.
-- `default_index`: The index for the default build file among all the files in the given build directory.
+- `default_index`: The index for the default build file inside the build directory.
 Should be a positive integer.
-- `ask_create_dir`: Whether to ask the user to create the build dir when trying to open a nonexistent one.
-If set to `false`, the dir will be created.
+- `ask_create_dir`: Whether to ask the user to create the build dir when trying to open it if it does not exist.
+If set to `false`, the dir will be created silently.
 - `run_type`: This option defines the behavior when running a build file.
 Here are its possible values, any other will result in an error:
     - `COMMAND`: Display the script's output in the command line.
@@ -50,9 +51,9 @@ local qbuild = require("vim-qbuild")
 local qconfig = require("vim-qbuild.config")
 
 -- add custom options if needed (override defaults)
-qconfig.setup({
+qconfig.setup {
     run_type = qconfig.TERMINAL
-})
+}
 
 -- open the build dir in netrw-vexplore
 vim.keymap.set("n", "<leader>qo", qbuild.open_build_dir)

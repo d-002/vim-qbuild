@@ -17,10 +17,9 @@ function get_scripts_dir()
     return vim.fs.joinpath(get_root(), config.options.build_dir)
 end
 
--- executes a script as if it were run in the directory it is stored
-function run_build_file(file)
+-- executes a script with the given run type, from the given directory
+function run_build_file(dir, file)
     local uv = vim.uv or vim.loop
-    local dir = vim.fs.dirname(file)
     local orig_cwd = uv.cwd()
 
     local result
@@ -75,15 +74,15 @@ end
 -- returns 0 on success, 1 on error
 function M.run_nth_build_file(index)
     local i = 1;
-    local parent = get_scripts_dir();
+    local root = get_scripts_dir();
 
     -- find nth file inside the scripts dir and run it
-    for name, type in vim.fs.dir(parent) do
+    for name, type in vim.fs.dir(root) do
         if type == "file" then
-            local path = vim.fs.joinpath(parent, name)
+            local path = vim.fs.joinpath(root, name)
 
             if i == index then
-                local result = run_build_file(path)
+                local result = run_build_file(root, path)
 
                 if result ~= nil then print(result) end
                 return 0
