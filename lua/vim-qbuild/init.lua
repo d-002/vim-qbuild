@@ -21,7 +21,7 @@ end
 function run_build_file(file)
     local uv = vim.uv or vim.loop
     local root = get_root()
-    local filepath = fim.fs.joinpath(
+    local filepath = vim.fs.joinpath(
         config.options.build_dir,
         vim.fs.basename(file)
     )
@@ -59,7 +59,7 @@ function run_build_file(file)
 
     function run_in_terminal()
         local chan = vim.b.terminal_job_id
-        vim.fn.chansend(chan, "cd " .. root .. "\n./" .. filepath .. "\n")
+        vim.fn.chansend(chan, "cd " .. root .. "\n" .. filepath .. "\n")
     end
 
     -- handle run_type option
