@@ -1,3 +1,5 @@
+local config = require("vim-qbuild.config")
+
 local M = {}
 
 function M.getRoot()
@@ -12,7 +14,7 @@ function M.getRoot()
     return project.get_project_root() or vim.fn.getcwd()
 end
 
-function M.getScriptsDir(config)
+function M.getScriptsDir()
     return vim.fs.joinpath(M.getRoot(), config.options.buildDir)
 end
 

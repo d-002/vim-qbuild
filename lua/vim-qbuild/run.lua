@@ -58,7 +58,7 @@ end
 
 -- returns 0 on success, 1 on error
 function M.runBuildFile()
-    return M.RunNthBuildFile(config.options.defaultIndex)
+    return M.runNthBuildFile(config.options.defaultIndex)
 end
 
 return M
