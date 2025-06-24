@@ -16,7 +16,7 @@ local function runFile(file)
 
     -- handle run_type option
     if config.options.runType == config.COMMAND then
-        run.runInCommand(root, filepath)
+        result = run.runInCommand(root, filepath)
     elseif config.options.runType == config.TERMINAL then
         run.findTerminal()
         run.runInTerminal(root, filepath)
