@@ -36,7 +36,7 @@ end
 -- run file in terminal
 function M.runInTerminal(root, filepath)
     local chan = vim.b.terminal_job_id
-    vim.fn.chansend(chan, "cd " .. root .. "\n" .. filepath .. "\n")
+    vim.fn.chansend(chan, 'cd "' .. root .. '" ; "' .. filepath .. '"\n')
 end
 
 return M
