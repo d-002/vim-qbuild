@@ -31,7 +31,7 @@ use {
 Here is a list of the available options:
 
 - `buildDir`: Used to specify the build directory inside the current project.
-If your project is `~/my_project` and this option is set to `.qbuild`, then the scripts will be searched inside `~/my_project/.qbuild`.
+If your project is `~/my_project` and this option is set to `.qbuild_scripts`, then the scripts will be searched inside `~/my_project/.qbuild_scripts`.
 - `verbose`: Whether to log extra information.
 Should be a boolean value.
 - `defaultIndex`: The index for the default build file inside the build directory.
@@ -43,6 +43,18 @@ Here are its possible values, any other will result in an error:
     - `COMMAND`: Display the script's output in the command line.
     - `TERMINAL`: Run the script in an existing terminal window (find the first one), or behave like `NEWTERM` if it cannot find one.
     - `NEWTERM`: Create a new terminal window with vsplit, then run the script there.
+
+These options default to:
+
+```lua
+{
+    buildDir = ".qbuild",
+    verbose = true,
+    defaultIndex = 1,
+    askCreateDir = true,
+    runType = M.COMMAND,
+}
+```
 
 Below is an example configuration for vim-qbuild:
 
