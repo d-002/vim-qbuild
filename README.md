@@ -1,6 +1,9 @@
 # vim-qbuild
-
 <!-- qbuild.nvim -->
+
+> [!WARNING]
+> This plugin's code was recently refactored, and most of the global functions have been renamed to use [Camel case](https://en.wikipedia.org/wiki/Camel_case).
+> Please check your configuration files if you encounter errors.
 
 Quickly run build scripts and more anywhere in your projects, with a simple command.
 
