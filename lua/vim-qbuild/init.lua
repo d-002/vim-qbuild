@@ -1,9 +1,12 @@
--- core features, directly related to building
+local config = require("vim-qbuild.config")
 local run = require("vim-qbuild.run")
--- extra features
 local extra = require("vim-qbuild.extra")
 
 local M = {}
+
+function M.setup(userOptions)
+    config.setup(userOptions)
+end
 
 M.runBuildFile = run.runBuildFile
 M.runNthBuildFile = run.runNthBuildFile
