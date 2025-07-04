@@ -9,7 +9,7 @@ local function open_dir(path) vim.cmd("Vexplore " .. path) end
 function M.openBuildDir()
     local root = utils.getRoot();
     local scriptsDir = utils.getScriptsDir(root)
-    local options = config.projectWise(utils.getProjectModule(root))
+    local options = config.projectWise(utils.getProjectwise(root))
 
     local uv = vim.uv or vim.loop
     local stat = uv.fs_stat(scriptsDir)

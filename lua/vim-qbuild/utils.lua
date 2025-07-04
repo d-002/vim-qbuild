@@ -16,9 +16,8 @@ function M.getScriptsDir(root)
     return vim.fs.joinpath(root, '.qbuild', 'scripts')
 end
 
--- Warning: doesn't add the .lua extension for require() later
-function M.getProjectModule(root)
-    return vim.fs.joinpath(root, '.qbuild', 'config')
+function M.getProjectwise(root)
+    return vim.fs.joinpath(root, '.qbuild', 'config.lua')
 end
 
 function M.isYes(str)

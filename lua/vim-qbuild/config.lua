@@ -35,20 +35,22 @@ end
 
 -- path: the custom options file to load, doesn't need to exist
 -- returns the options altered by this project's custom options file
-function M.projectWise(module)
+function M.projectWise(path)
     -- not authorized
     if M.options.disableProjectWise then
         return M.options
     end
 
     -- no readable file: return the unaltered options
-    local path = module .. ".lua"
     if not vim.loop.fs_stat(path) or not vim.fn.filereadable(path) then
         return M.options
     end
 
-    local projectWise = require(module)
-    return setup(M.options, projectWise.options)
+    local loaded, err = pcall(dofile, path)
+    if not loaded then
+        error("Error loading project-wise config: " .. err)
+    end
+    return setup(M.options, config)
 end
 
 return M

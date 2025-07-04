@@ -31,7 +31,7 @@ function M.runBuildFile(query)
     local root = utils.getRoot();
     local scriptsDir = utils.getScriptsDir(root)
 
-    local options = config.projectWise(utils.getProjectModule(root))
+    local options = config.projectWise(utils.getProjectwise(root))
 
     local targetName = nil
     local targetIndex = nil
@@ -73,12 +73,10 @@ function M.runBuildFile(query)
 
     if options.verbose then
         local comment
-        if query == nil then
-            comment = " "
-        elseif query.name ~= nil then
-            comment = '"' .. query.name .. '" '
-        elseif query.index ~= nil then
-            comment = tostring(query.index) .. " "
+        if targetName ~=nil then
+            comment = '"' .. targetName .. '" '
+        elseif targetIndex then
+            comment = "index " .. targetIndex .. " "
         end
         print("Target QBuild script " .. comment .. "could not be found")
     end

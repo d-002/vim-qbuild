@@ -93,7 +93,7 @@ vim.keymap.set("n", "<leader>q3", function() qbuild.runBuildFile({index=3}) end)
 
 On top of being able to set global, custom options through vim-qbuild's `M.setup` function, it is possible to specify project-wise options by creating `[project root]/.qbuild/config.lua`.
 
-This file should contain a requireable lua module, that will be used to alter the configuration.
+This file should contain specific lua-like code, that will be used to alter the configuration.
 It should define `M.options`, a dictionary with all the project-wise values.
 
 Be careful about the code you put in there, as the module will be executed on your machine!
@@ -102,15 +102,15 @@ If you want to avoid security issues with shared configurations for example, fee
 An example projet-wise options file could look like this:
 
 ```lua
+-- if needed, to access runType constants for example
 local qconfig = require("vim-qbuild.config")
 
-return {
-    options = {
-        -- default build script
-        defaultScript = "main",
-        -- don't use a terminal for this project
-        runType = qconfig.COMMAND, -- use M.[constant] to access qbuild constants
-    }
+-- MUST follow this syntax and define global config
+config = {
+    -- default build script
+    defaultScript = "main",
+    -- don't use a terminal for this project
+    runType = qconfig.COMMAND,
 }
 ```
 
