@@ -5,41 +5,63 @@ local run = require("vim-qbuild.runutils")
 local M = {}
 
 -- executes a script with the given run type, from the given directory
-local function runFile(file)
+local function runFile(options, file)
     local root = utils.getRoot()
-    local filepath = vim.fs.joinpath(
-        config.options.buildDir,
-        vim.fs.basename(file)
-    )
 
     local result
 
     -- handle run_type option
-    if config.options.runType == config.COMMAND then
-        result = run.runInCommand(root, filepath)
-    elseif config.options.runType == config.TERMINAL then
+    if options.runType == config.COMMAND then
+        result = run.runInCommand(root, file)
+    elseif options.runType == config.TERMINAL then
         run.findTerminal()
-        run.runInTerminal(root, filepath)
-    elseif config.options.runType == config.NEWTERM then
+        run.runInTerminal(root, file)
+    elseif options.runType == config.NEWTERM then
         run.newTerminal()
-        run.runInTerminal(root, filepath)
+        run.runInTerminal(root, file)
     end
 
     return result
 end
 
 -- returns 0 on success, 1 on error
-function M.runNthBuildFile(index)
+-- query: either {}, {index = [int]}, {name = [string]}
+-- name has priority
+function M.runBuildFile(query)
+    local root = utils.getRoot();
+    local scriptsDir = utils.getScriptsDir(root)
+
+    local options = config.projectWise(utils.getProjectwise(root))
+
+    local targetName = nil
+    local targetIndex = nil
+
+    if (query ~= nil) then
+        targetName = query.name
+        if targetName == nil then
+            targetIndex = query.index
+        end
+    end
+
+    -- if no query provided, find the default script
+    if targetName == nil and targetIndex == nil then
+        if options.defaultScript == nil then
+            -- if none, just find the first file
+            targetIndex = 1
+        else
+            targetName = options.defaultScript
+        end
+    end
+
     local i = 1;
-    local root = utils.getScriptsDir();
 
-    -- find nth file inside the scripts dir and run it
-    for name, type in vim.fs.dir(root) do
+    -- find targeted file and run it
+    for name, type in vim.fs.dir(scriptsDir) do
         if type == "file" then
-            local path = vim.fs.joinpath(root, name)
+            local path = vim.fs.joinpath(scriptsDir, name)
 
-            if i == index then
-                local result = runFile(path)
+            if name == targetName or i == targetIndex then
+                local result = runFile(options, path)
 
                 if result ~= nil then print(result) end
                 return 0
@@ -49,16 +71,17 @@ function M.runNthBuildFile(index)
         end
     end
 
-    if config.options.verbose then
-        print("Target QBuild script could not be found")
+    if options.verbose then
+        local comment
+        if targetName ~=nil then
+            comment = '"' .. targetName .. '" '
+        elseif targetIndex then
+            comment = "index " .. targetIndex .. " "
+        end
+        print("Target QBuild script " .. comment .. "could not be found")
     end
 
     return 1
-end
-
--- returns 0 on success, 1 on error
-function M.runBuildFile()
-    return M.runNthBuildFile(config.options.defaultIndex)
 end
 
 return M
