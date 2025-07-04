@@ -102,12 +102,14 @@ If you want to avoid security issues with shared configurations for example, fee
 An example projet-wise options file could look like this:
 
 ```lua
+local qconfig = require("vim-qbuild.config")
+
 return {
     options = {
         -- default build script
-        defaultScript = "main"
+        defaultScript = "main",
         -- don't use a terminal for this project
-        runType = M.COMMAND, -- use M.[constant] to access qbuild constants
+        runType = qconfig.COMMAND, -- use M.[constant] to access qbuild constants
     }
 }
 ```

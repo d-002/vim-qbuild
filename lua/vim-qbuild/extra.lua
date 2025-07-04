@@ -7,40 +7,43 @@ local function create_dir(path) vim.fn.mkdir(path, "p") end
 local function open_dir(path) vim.cmd("Vexplore " .. path) end
 
 function M.openBuildDir()
-    local path = utils.getScriptsDir()
+    local root = utils.getRoot();
+    local scriptsDir = utils.getScriptsDir(root)
+    local options = config.projectWise(utils.getProjectModule(root))
+
     local uv = vim.uv or vim.loop
-    local stat = uv.fs_stat(path)
+    local stat = uv.fs_stat(scriptsDir)
 
     -- no dir: ask or create it
     if not stat then
-        if config.options.askCreateDir then
+        if options.askCreateDir then
             vim.ui.input(
-                { prompt = "Create missing dir " .. path .. "? [Y/n] " },
+                { prompt = "Create missing dir " .. scriptsDir .. "? [Y/n] " },
 
                 function(input)
                     if utils.isYes(input) then
-                        create_dir(path)
-                        open_dir(path)
-                    elseif config.options.verbose then
+                        create_dir(scriptsDir)
+                        open_dir(scriptsDir)
+                    elseif options.verbose then
                         print("Operation cancelled by user")
                     end
                 end
             )
 
         else
-            create_dir(path)
-            open_dir(path)
+            create_dir(scriptsDir)
+            open_dir(scriptsDir)
         end
 
     -- not a dir: abort
     elseif stat.type ~= "directory" then
-        if config.options.verbose then
-            print(path .. " is not a directory")
+        if options.verbose then
+            print(scriptsDir .. " is not a directory")
         end
 
     -- ok
     else
-        open_dir(path)
+        open_dir(scriptsDir)
     end
 end
 

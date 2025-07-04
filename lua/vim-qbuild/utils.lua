@@ -1,5 +1,3 @@
-local config = require("vim-qbuild.config")
-
 local M = {}
 
 function M.getRoot()
@@ -14,8 +12,13 @@ function M.getRoot()
     return project.get_project_root() or vim.fn.getcwd()
 end
 
-function M.getScriptsDir()
-    return vim.fs.joinpath(M.getRoot(), config.options.buildDir)
+function M.getScriptsDir(root)
+    return vim.fs.joinpath(root, '.qbuild', 'scripts')
+end
+
+-- Warning: doesn't add the .lua extension for require() later
+function M.getProjectModule(root)
+    return vim.fs.joinpath(root, '.qbuild', 'config')
 end
 
 function M.isYes(str)
