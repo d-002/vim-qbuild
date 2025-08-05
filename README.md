@@ -40,11 +40,11 @@ Should be a string, or `nil` to revert to finding the first file in the scripts 
 Should be a boolean value.
 If set to `false`, the dir will be created silently.
 - `runType`: This option defines the behavior when running a build file.
-Here are its possible values, any other will result in an error:
-    - `COMMAND`: Display the script's output in the command line.
-    - `TERMINAL`: Run the script in an existing terminal window (find the first one), or behave like `NEWTERM` if it cannot find one.
-    - `NEWTERM`: Create a new terminal window with vsplit, then run the script there.
-- `disableProjectWise`: disable loading project-wise options files (see subsection below).
+Here are its possible values, any other will result in an error (`qconfig` refers to the `vim-qbuild.config` file):
+    - `qconfig.COMMAND`: Display the script's output in the command line.
+    - `qconfig.TERMINAL`: Run the script in an existing terminal window (find the first one), or behave like `NEWTERM` if it cannot find one.
+    - `qconfig.NEWTERM`: Create a new terminal window with vsplit, then run the script there.
+- `disableProjectWise`: disable loading project-wise options files (for security purposes, see subsection below).
 Should be a boolean value.
 
 These options default to:
@@ -79,7 +79,7 @@ vim.keymap.set("n", "<leader>qo", qbuild.openBuildDir)
 vim.keymap.set("n", "<leader>qb", qbuild.runBuildFile)
 
 -- run the build script named "main"
-vim.keymap.set("n", "<leader>qm", function() qbuild.runBuildFile{name="main"} end)
+vim.keymap.set("n", "<leader>qm", function() qbuild.runBuildFile({name="main"}) end)
 
 -- run the first build script
 vim.keymap.set("n", "<leader>q1", function() qbuild.runBuildFile({index=1}) end)
