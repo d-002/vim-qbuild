@@ -21,7 +21,7 @@ function M.openBuildDir()
                 { prompt = "Create missing dir " .. scriptsDir .. "? [Y/n] " },
 
                 function(input)
-                    if utils.isYes(input) then
+                    if utils.isYes(input) or input == "" then
                         create_dir(scriptsDir)
                         open_dir(scriptsDir)
                     elseif options.verbose then
