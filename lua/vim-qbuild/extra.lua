@@ -4,7 +4,7 @@ local utils = require("vim-qbuild.utils")
 local M = {}
 
 local function create_dir(path) vim.fn.mkdir(path, "p") end
-local function open_dir(path) vim.cmd("Vexplore " .. path) end
+local function open_dir(path) vim.cmd("Explore " .. path) end
 
 function M.openBuildDir()
     local root = utils.getRoot();

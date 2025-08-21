@@ -72,7 +72,7 @@ qconfig.setup {
     runType = qconfig.TERMINAL
 }
 
--- open the build dir in netrw-vexplore
+-- open the build dir in netrw
 vim.keymap.set("n", "<leader>qo", qbuild.openBuildDir)
 
 -- run the default build script
@@ -125,7 +125,7 @@ The optional `query` parameter can be either:
     Scripts are ordered by name.
     - `{name = "name"}`: find and run the script named `[project root]/.qbuild/scripts/name`.
     In case both the name and index are specified, the name will be the one target.
-- `openBuildDir()`: open the build dir in a new netrw window.
+- `openBuildDir()`: open the build dir in netrw, in the current window.
 
 QBuild also defines custom user commands:
 
